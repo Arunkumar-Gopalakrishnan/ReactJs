@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Data Using Fetch</title>
+   <style>/* General body styling */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f7f6;
+        color: #333;
+    }
+    
+    /* Header styling */
+    h1 {
+        text-align: center;
+        padding: 20px;
+        background-color: #4CAF50;
+        color: white;
+        margin: 0;
+    }
+    
+    /* Styling for the post details container (3 columns layout) */
+    #post_details {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+    }
+    
+    /* Styling for each post item */
+    .post {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        width: 30%; /* 3 posts per row */
+        box-sizing: border-box; /* Prevents padding from affecting the width */
+    }
+    
+    /* On hover, slightly scale up the post */
+    .post:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Title styling */
+    h2 {
+        color: #4CAF50;
+        font-size: 1.6rem;
+        margin-bottom: 10px;
+    }
+    
+    /* Body text styling */
+    p {
+        font-size: 1rem;
+        color: #555;
+    }
+    
+    /* Responsive design for smaller screens */
+    @media (max-width: 768px) {
+        /* For tablets and smaller screens, make the posts stack */
+        #post_details {
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        .post {
+            width: 80%; /* Make the posts take up more width on small screens */
+        }
+    }
+    
+    @media (max-width: 480px) {
+        /* For mobile screens, make each post take up the entire width */
+        .post {
+            width: 100%;
+        }
+    }
+    </style>
+</head>
+<body>
+    <h1>Post Details</h1>
+    <div id="post_details"></div>
+
+    <script>
+        fetch('http://localhost:3000/post')
+        .then(response => {
+            console.log('Response:', response); // Check if the request is successful
+            return response.json();
+        })
+        .then(data => {
+            console.log('Fetched Data:', data); // Check the fetched data
+            const postDetails = document.getElementById('post_details');
+            data.forEach(post => {
+                console.log('Post ID:', post.id); // Check if the id is present
+                if (post.userId >= 10) {
+                    const postElement = document.createElement('div');
+                    postElement.classList.add('post'); // Add the "post" class for styling
+                    postElement.innerHTML = `<h2>${post.title}</h2><p>${post.body}</p>`;
+                    postDetails.appendChild(postElement);
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    </script>
+</body>
+</html>
